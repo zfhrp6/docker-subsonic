@@ -4,5 +4,5 @@ docker run \
   --restart='always' \
   --name subsonic \
   --publish 8080:8080 \
-  --volume "/media/music/:/opt/music/:ro" \
+  --volume "/path/to/music/:/opt/music/:ro" \
   jorispotier/rpi-subsonic
