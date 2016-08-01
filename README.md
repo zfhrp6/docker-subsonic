@@ -5,7 +5,7 @@ runnable on a Raspberry Pi.
 
 ## Noteworthy
 
-* Subsonic 6.0.beta2 (http://www.subsonic.org)
+* Subsonic 6.0 (http://www.subsonic.org)
 
 ## Build your own image
 
