@@ -51,7 +51,7 @@ RUN curl -fSL "$TOMCAT_TGZ_URL" -o tomcat.tar.gz \
 ## Subsonic installation ##
 ###########################
 
-ENV SUBSONIC_VERSION 6.0.beta2
+ENV SUBSONIC_VERSION 6.0
 
 LABEL version="$SUBSONIC_VERSION"
 LABEL description="Subsonic media streamer"
