@@ -36,7 +36,7 @@ RUN for key in \
 	done
 
 ENV TOMCAT_MAJOR 8
-ENV TOMCAT_VERSION 8.0.36
+ENV TOMCAT_VERSION 8.5.29
 ENV TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 
 RUN curl -fSL "$TOMCAT_TGZ_URL" -o tomcat.tar.gz \
@@ -51,23 +51,25 @@ RUN curl -fSL "$TOMCAT_TGZ_URL" -o tomcat.tar.gz \
 ## Subsonic installation ##
 ###########################
 
-ENV SUBSONIC_VERSION 6.0
+ENV SUBSONIC_VERSION 6.1.3
 
 LABEL version="$SUBSONIC_VERSION"
 LABEL description="Subsonic media streamer"
 
-RUN apt-get -y install libav-tools lame unzip &&\
-        mkdir -p /opt/data/transcode /opt/music/ /opt/playlist/ /opt/podcast/ &&\
-        ln -s /usr/bin/lame /opt/data/transcode/lame &&\
-        ln -s /usr/bin/avconv /opt/data/transcode/ffmpeg &&\
-        cd  ${CATALINA_HOME}/webapps/ &&\
-        rm -rf ROOT &&\
-        wget "http://downloads.sourceforge.net/project/subsonic/subsonic/$SUBSONIC_VERSION/subsonic-$SUBSONIC_VERSION-war.zip?r=http%3A%2F%2Fwww.subsonic.org%2Fpages%2Fdownload2.jsp%3Ftarget%3Dsubsonic-$SUBSONIC_VERSION-standalone.tar.gz&ts=1431096340&use_mirror=garr" \
-        -O subsonic.war.zip --quiet  &&\
-        unzip subsonic.war.zip && rm subsonic.war.zip && mv subsonic.war ROOT.war &&\
-	rm -rf /var/lib/apt/lists/*
+RUN apt-get -y install openssl lame unzip opus-tools flac \
+  && mkdir -p /opt/data/transcode /opt/music/ /opt/playlist/ /opt/podcast/ \
+  && ln -s /usr/bin/lame /opt/data/transcode/lame \
+  && ln -s /usr/bin/avconv /opt/data/transcode/ffmpeg \
+  && ln -s /usr/bin/opusenc /opt/data/transcode/opuenc \
+  && ln -s /usr/bin/flac /opt/data/transcode/flac \
+  && cd  ${CATALINA_HOME}/webapps/ \
+  && rm -rf ROOT \
+  && wget "https://sourceforge.net/projects/subsonic/files/subsonic/$SUBSONIC_VERSION/subsonic-${SUBSONIC_VERSION}-war.zip" \
+    -O subsonic.war.zip --quiet \
+  && unzip subsonic.war.zip && rm subsonic.war.zip && mv subsonic.war ROOT.war \
+	&& rm -rf /var/lib/apt/lists/*
 
-ADD server.xml /usr/local/tomcat/conf/
+ADD server.xml ${CATALINA_HOME}/conf/
 ENV JAVA_OPTS="-Dsubsonic.contextPath=/ -Dsubsonic.home=/opt/data -Dsubsonic.defaultMusicFolder=/opt/music/ -Dsubsonic.defaultPodcastFolder=/opt/podcast/ -Dsubsonic.defaultPlaylistFolder=/opt/playlist/"
 
 VOLUME /opt/data
