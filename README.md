@@ -13,18 +13,6 @@ runnable on a Raspberry Pi.
 $ docker build -t <your-name>/rpi-subsonic .
 ```
 
-## Get a pre-built image
-
-A current image is available as a trusted build from the Docker index:
-
-```shell
-$ docker pull jorispotier/rpi-subsonic
-```
-
-The repository page is at
-https://index.docker.io/u/jorispotier/rpi-subsonic/
-
-
 ## Run a container with this image
 
 ```shell
